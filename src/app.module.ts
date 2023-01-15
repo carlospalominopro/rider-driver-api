@@ -8,15 +8,16 @@ import { APP_FILTER, RouterModule } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { TransactionModule } from './transaction/transaction.module';
 import { Transaction } from './transaction/entity/transaction.entity';
-import { Payment } from './payment/entity/payment.entity';
 import { RequestModule } from './request/request.module';
 import { Request } from './request/entity/request.entity';
 import { HttpExceptionFilter } from './utils/http-exception.filter';
-
+import { HttpModule } from '@nestjs/axios';
+import { AppEntity } from './app.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    HttpModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DATABASE_HOST,
@@ -25,14 +26,16 @@ import { HttpExceptionFilter } from './utils/http-exception.filter';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DATABASE,
       entities: [
+        AppEntity,
         Driver,
         Rider,
-        Payment,
         Request,
         Transaction,
       ],
       synchronize: true,
     }),
+
+    TypeOrmModule.forFeature([AppEntity]),
     
     TransactionModule,
     RequestModule,
@@ -46,8 +49,7 @@ import { HttpExceptionFilter } from './utils/http-exception.filter';
         path: 'api',
         module: RequestModule,
       },      
-    ]), 
-    
+    ])    
   ],
   controllers: [AppController],
   providers: [

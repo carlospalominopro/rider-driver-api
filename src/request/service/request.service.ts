@@ -1,12 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Request } from "../entity/request.entity";
 import { CreateRequest } from "../entity/create-request.dto";
 import { Rider } from "../../rider/entity/rider.entity";
 import { Driver } from "../../driver/entity/driver.entity";
-import { HttpException } from "@nestjs/common/exceptions";
-import { HttpStatus } from "@nestjs/common/enums";
 
 @Injectable()
 export class RequestService {
@@ -19,14 +17,19 @@ export class RequestService {
     private driverRepository: Repository<Driver>
   ) {}
 
-  async store(data: CreateRequest): Promise<Request> {
+  async store(data: CreateRequest) {
     const findRider = await this.riderRepository.findOne({
       where: {
         id: data.rider_id,
       },
     });
 
-    console.log(findRider);
+    if (!findRider) {
+      throw new HttpException(
+        "Rider not found - Please verify the rider_id",
+        HttpStatus.NOT_FOUND
+      );
+    }
 
     // SE SELECCIONA UN CONDUCTOR RANDOM
     const findDriver = await this.driverRepository
@@ -35,25 +38,30 @@ export class RequestService {
       .orderBy("RAND()")
       .getOne();
 
-    console.log(findDriver);
-
-    if (findRider && findDriver) {
-      const request = new Request();
-      request.driver = findDriver;
-      request.latitude_start = data.latitude;
-      request.longitude_start = data.longitude;
-      request.rider = findRider;
-
-      console.log(request);
-
-      return this.requestRepository.create(request);
-    } else {
+    if (!findDriver) {
       throw new HttpException(
-        {
-          error: "No se encontró Driver o Rider"
-        },
-        HttpStatus.BAD_REQUEST
+        "Driver not found - Please verify table driver on DB",
+        HttpStatus.NOT_FOUND
       );
     }
+
+    const request = new Request();
+    request.driver = findDriver;
+    request.latitude_start = data.latitude;
+    request.longitude_start = data.longitude;
+    request.rider = findRider;
+    request.startDate = new Date();
+
+    console.log(request);
+
+    const dataRequest = await this.requestRepository.save(request);
+
+    return {
+      message : 'Satisfactory driver request',
+      data  : {
+        idRequest : dataRequest.id,
+        driver : dataRequest.driver.name,
+      }
+    };
   }
 }

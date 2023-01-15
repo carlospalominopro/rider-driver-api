@@ -1,7 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Rider } from '../../rider/entity/rider.entity';
 import { Driver } from '../../driver/entity/driver.entity';
-import { Payment } from '../../payment/entity/payment.entity';
 import { Request } from '../../request/entity/request.entity';
 
 @Entity()
@@ -24,22 +23,7 @@ export class Transaction {
   @Column()
   status: string;
 
-  @OneToOne(() => Payment, (payment) => payment.id_payment)
-  @JoinColumn()
-  payment_method: Payment;
-
-  @Column()
-  installments: number;
-
-  @OneToOne(() => Rider, (rider) => rider.id)
-  @JoinColumn()
-  rider: Rider;
-
-  @OneToOne(() => Driver, (driver) => driver.id)
-  @JoinColumn()
-  driver: Driver;
-
-  @OneToOne(() => Request, (request) => request.id)
+  @OneToMany(() => Request, (request) => request.id)
   @JoinColumn()
   request: Request;
 }

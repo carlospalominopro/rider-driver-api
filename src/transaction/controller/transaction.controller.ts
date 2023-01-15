@@ -1,17 +1,19 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { TransactionService } from '../service/transaction.service';
-import { Transaction } from '../entity/transaction.entity';
+import { CreateTransaction } from '../entity/create-transaction.dto';
 
 @Controller('transaction')
 export class TransactionController {
 
-    constructor(private readonly transactionService : TransactionService) {
+    constructor(
+        private readonly transactionService : TransactionService
+
+    ) {
     }
 
-    @Post()
-    store(): Promise<Transaction[]> {
-        
-        return this.transactionService.store();
+    @Post('create')
+    create(@Body() data : CreateTransaction){
+        return this.transactionService.create(data);
 
     }
 
