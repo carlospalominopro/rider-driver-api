@@ -43,6 +43,10 @@ import { AppEntity } from './app.entity';
     RouterModule.register([
       {
         path: 'api',
+        module: AppModule,
+      },      
+      {
+        path: 'api',
         module: TransactionModule,
       },      
       {
@@ -51,6 +55,7 @@ import { AppEntity } from './app.entity';
       },      
     ])    
   ],
+  exports : [AppService],
   controllers: [AppController],
   providers: [
     AppService,

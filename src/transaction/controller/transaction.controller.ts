@@ -13,7 +13,7 @@ export class TransactionController {
 
     @Post('create')
     create(@Body() data : CreateTransaction){
-        return this.transactionService.create(data);
+        return this.transactionService.store(data);
 
     }
 

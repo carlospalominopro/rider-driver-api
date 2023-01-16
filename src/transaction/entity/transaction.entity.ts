@@ -1,29 +1,38 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Rider } from '../../rider/entity/rider.entity';
-import { Driver } from '../../driver/entity/driver.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { Request } from '../../request/entity/request.entity';
 
 @Entity()
 export class Transaction {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn("uuid")
   id: number;
 
-  @Column()
+  @Column({
+    nullable : false,
+    type : 'float'
+  })
   amount_in_cents: number;
 
-  @Column()
+  @Column({
+    nullable : false
+  })
   currency: string;
 
-  @Column()
-  customer_email: string;
-
-  @Column()
+  @Column({
+    nullable : false
+  })
   reference: string;
 
-  @Column()
+  @Column({
+    nullable : false
+  })
   status: string;
 
-  @OneToMany(() => Request, (request) => request.id)
+  @Column({
+    nullable : false
+  })
+  createdAt: Date;
+
+  @OneToOne(() => Request, (request) => request.id)
   @JoinColumn()
   request: Request;
 }

@@ -1,4 +1,4 @@
-import { Rider } from "src/rider/entity/rider.entity";
+import { Rider } from "../../rider/entity/rider.entity";
 import { Driver } from '../../driver/entity/driver.entity';
 import {
   Entity,

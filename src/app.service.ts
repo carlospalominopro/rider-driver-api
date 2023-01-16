@@ -19,7 +19,7 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async login(): Promise<AppEntity> {
+  async getToken(): Promise<AppEntity> {
 
     const url = `${process.env.API_URL}/merchants/${process.env.PUB_TEST}`;
 
@@ -31,6 +31,22 @@ export class AppService {
     tokenData.acceptance_token = presigned_acceptance?.acceptance_token;
 
     return this.appRepository.save(tokenData);    
+
+  }
+
+  async getLastAcceptanceToken(): Promise<AppEntity> {
+
+    return this.appRepository
+      .createQueryBuilder("app_entity")
+      .select()
+      .orderBy({ id: 'DESC' })
+      .getOne();   
+
+  }
+  
+  async checkToken(): Promise<number> {
+
+    return this.appRepository.count();   
 
   }
 

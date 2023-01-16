@@ -11,10 +11,10 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Post('login')
-    login(): Promise<AppEntity> {
+  @Post('get-token')
+    getToken(): Promise<AppEntity> {
         
-      return this.appService.login();
+      return this.appService.getToken();
 
     }
 }

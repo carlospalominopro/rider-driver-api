@@ -5,6 +5,7 @@ import { Request } from "../entity/request.entity";
 import { CreateRequest } from "../entity/create-request.dto";
 import { Rider } from "../../rider/entity/rider.entity";
 import { Driver } from "../../driver/entity/driver.entity";
+import { AppService } from '../../app.service';
 
 @Injectable()
 export class RequestService {
@@ -14,10 +15,21 @@ export class RequestService {
     @InjectRepository(Rider)
     private riderRepository: Repository<Rider>,
     @InjectRepository(Driver)
-    private driverRepository: Repository<Driver>
+    private driverRepository: Repository<Driver>,
+    private readonly appService: AppService,
   ) {}
 
   async store(data: CreateRequest) {
+
+    const validateToken = await this.appService.checkToken();
+
+    if(validateToken == 0){
+      throw new HttpException(
+        "Acceptance token not found on DB - please login first - /login",
+        HttpStatus.NOT_FOUND
+      );
+    }
+
     const findRider = await this.riderRepository.findOne({
       where: {
         id: data.rider_id,
@@ -52,16 +64,27 @@ export class RequestService {
     request.rider = findRider;
     request.startDate = new Date();
 
-    console.log(request);
-
     const dataRequest = await this.requestRepository.save(request);
 
     return {
-      message : 'Satisfactory driver request',
+      message : 'Driver found',
       data  : {
         idRequest : dataRequest.id,
         driver : dataRequest.driver.name,
       }
     };
   }
+
+  async update(id : number, request : Request) {
+    return this.requestRepository.update(id,request);
+  }
+  
+  async getRequest(id : number) {
+    const request = this.requestRepository.findOneBy({
+      id,
+    });
+    
+    return request;
+  }
+
 }
