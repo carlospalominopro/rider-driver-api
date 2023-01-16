@@ -7,7 +7,7 @@ The following are the steps to be followed to execute the project locally
 ##### Make sure you have Node.js and MySql installed.
 
     
-## Database connection
+## Database connection - MySQL 8.0.31
 
 ```bash
   HOST  : localhost
