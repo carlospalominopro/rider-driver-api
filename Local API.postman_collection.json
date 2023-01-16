@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "03beace6-26b8-444f-ac1c-143152550c55",
+		"name": "Local API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25250527"
+	},
+	"item": [
+		{
+			"name": "01 - Get Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/get-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"get-token"
+					]
+				},
+				"description": "Login to get **acceptance_token** from API Sandbox"
+			},
+			"response": []
+		},
+		{
+			"name": "02 - Request driver",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"rider_id\" : 2,\r\n    \"latitude\" : 2.199011986909997,\r\n    \"longitude\" : -75.63170384894909\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/request/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"request",
+						"create"
+					]
+				},
+				"description": "``` json\nrider_id : Rider ID from DB Table - rider\n\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "03 - Transaction Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idRequest\": 1,\r\n    \"latitude_end\" : 2.1937251935489277,\r\n    \"longitude_end\" : -75.62205918629267    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/transaction/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"transaction",
+						"create"
+					]
+				},
+				"description": "- **idRequest : ID Request previously created in database - /api/request/create**"
+			},
+			"response": []
+		}
+	]
+}
