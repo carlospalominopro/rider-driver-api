@@ -37,7 +37,7 @@ Install rider-driver-api
 
 ### Note : The use of POSTMAN is recommended, in root folder 
 -------------------------------------------------
-#### 01 - Get token
+#### 01 - Get token (acceptance_token)
 
 ```http
   POST /api/get-token
@@ -47,7 +47,7 @@ Install rider-driver-api
 | :-------- | 
 | No parameters required |
 
-#### 02 - Request driver
+#### 02 - Request driver (The rider request a driver)
 
 ```http
   POST /api/request/create
@@ -59,7 +59,7 @@ Install rider-driver-api
 | `latitude`      | `float` | **Required**. Rider's Latitude | 4.608839965578942 |
 | `latitude`      | `float` | **Required**. Rider's Longitude | -74.07642114458059 |
 
-#### 03 - Transaction Create (end trip)
+#### 03 - Transaction Create (The driver ends the trip)
 
 ```http
   POST /api/transaction/create
